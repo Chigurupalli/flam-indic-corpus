@@ -4,13 +4,13 @@
 
 | Source | License | Input records | File size |
 |---|---|---:|---:|
-| Wikimedia Wikipedia, Hindi (`20231101.hi`) | Verify dataset card and applicable source license | 15,000 | 93,870,431 bytes |
+| Wikimedia Wikipedia, Hindi (`20231101.hi`) | CC BY-SA 3.0 and GFDL (per dataset card; individual content may have additional licensing terms) | 15,000 | 93,870,431 bytes |
 | LingoIITGN/HinGE | CC BY 4.0 | 1,976 | 1,591,630 bytes |
 | **Total** | | **16,976** | **95,462,061 bytes** |
 
 The Wikipedia input is a 15,000-record JSONL export, not the original full Wikimedia XML dump. The HinGE dataset uses the `Human-generated Hinglish` field. Source metadata and input file SHA-256 hashes are recorded in `data/output/manifest.json`.
 
-The Wikipedia dataset card lists CC BY-SA 3.0 and GFDL. See SOURCES.md for the source links and licensing caveats; verify applicable attribution and redistribution terms before redistributing content.
+The Wikipedia dataset card lists CC BY-SA 3.0 and GFDL. Individual content may have additional licensing terms. See `SOURCES.md` for source links; review applicable attribution and redistribution requirements before redistributing derived content.
 
 ## 2. Funnel (per language)
 
@@ -136,22 +136,55 @@ The pipeline's filter-stage ledger reports the following removals:
 | URL-heavy spam | 2 |
 | **Total** | **132** |
 
-These counts describe filter decisions, not confirmed false positives. The actual documents must be inspected before identifying legitimate text wrongly removed by a filter.
+These counts describe filter decisions, not confirmed false positives. The original source records were inspected for the four documents removed by the two repetition-related rules.
 
-### Manual review status
+### Manual review of repetition-filter examples
 
-The filter false-positive review remains incomplete.
+**1. Hindi Wikipedia — `repetitive_top_token`**
 
-For each verified example, record:
+- **Document ID:** `9a22bee28b8c8407`
+- **Source:** `hindi_wikipedia`
+- **Original text:** A list of Kannada-related terms, including Kannada language, script, literature, food, and Kannada Wikipedia.
+- **Assessment:** The text resembles a navigation or related-links list rather than a complete article.
+- **Decision:** Not counted as a confirmed false positive. Dropping it is reasonable for this corpus.
 
-1. The document ID and filter reason.
-2. The original text.
-3. Why the text is legitimate and should have been retained.
-4. The decision and any proposed filter adjustment.
+**2. HinGE — `repetitive_top_token`**
 
-No additional filter false positives are claimed until examples have been inspected. If no further examples are found, document that outcome rather than inventing examples.
+- **Document ID:** `fa7f8b9b526e81ff`
+- **Source:** `hinge`
+- **Original text:** `So 8 is 2 guna 2 guna 2` and `to 2 hota hai 2 times 2 times 2.`
+- **Assessment:** This is understandable educational Hinglish explaining multiplication. The repeated number `2` is meaningful mathematical content rather than spam.
+- **Decision:** Likely false positive. The example should ideally be retained, or the filter should be adjusted to avoid penalizing natural numeric repetition.
 
-Deliberate non-rules include avoiding a blanket minimum-length rule that could discard proverbs or couplets, not treating digits alone as symbols, and requiring a minimum token count before applying repetition rules. These choices should be validated against the implemented filter logic and representative examples.
+**3. Hindi Wikipedia — `repetitive_low_diversity`**
+
+- **Document ID:** `64a4ff82382f7b6e`
+- **Source:** `hindi_wikipedia`
+- **Assessment:** The original Hindi text contains broken words, unusual spacing inside words, and other signs of malformed or corrupted text.
+- **Decision:** Not counted as a confirmed false positive because the inspected text is visibly corrupted.
+
+**4. Hindi Wikipedia — `repetitive_low_diversity`**
+
+- **Document ID:** `8c0537cb13382eba`
+- **Source:** `hindi_wikipedia`
+- **Assessment:** The original text about translation contains broken words, unusual character sequences, and malformed text.
+- **Decision:** Not counted as a confirmed false positive because the inspected text is visibly corrupted.
+
+This review covers four repetition-filtered records. It does not establish the overall filter false-positive rate. The HTML-markup, Wikitext-markup, and URL-heavy removals have not all been individually reviewed.
+
+### Filter configuration and decision
+
+The repetition filter is configured with the following values:
+
+- `REPEAT_MIN_TOKENS = 10`
+- `REPEAT_TOP_SHARE = 0.40`
+- `REPEAT_UNIQUE_RATIO = 0.15`
+
+The filter checks repetition when a document has at least 10 tokens. It flags text when the most frequent token accounts for more than 40% of tokens or when the ratio of unique tokens to total tokens is below 15%.
+
+The reviewed mathematical Hinglish example illustrates a limitation of generic repetition rules: a frequently repeated number can be legitimate in an educational explanation. However, the sample is too small to justify changing the thresholds globally.
+
+Deliberate non-rules include avoiding a blanket minimum-length rule that could discard proverbs or couplets and requiring a minimum token count before applying repetition checks. Further review should inspect additional removed records and test any proposed changes against both noisy text and legitimate Hindi/Hinglish examples.
 
 ## 5. Contamination
 
@@ -189,7 +222,6 @@ Cross-script similarity is heuristic and can produce false positives. Manual ins
 Inspection of `contamination_rejected.jsonl` found near-match candidates involving distinct Wikipedia pages with shared template language. For example, the evaluation item about Kannauj district was matched against training text about Katihar, Khagaria, Gaya, and other Bihar districts, with near-match scores around 0.312–0.385. Another example matched the Palwal city evaluation item against Kishanganj and Khagaria city pages with a score of 0.529.
 
 These examples appear to be false positives caused by common encyclopedia sentence structures rather than identical underlying content. They demonstrate a limitation of similarity-based contamination detection: pages describing different places can share substantial wording. The examples were inspected as rejected candidates; they should not be interpreted as confirmed contamination or as proof that all flagged pairs are false positives.
-
 
 ## 6. Reproducibility
 
@@ -239,12 +271,13 @@ These are proposed improvements, not capabilities demonstrated by the current ru
 - Sample of 1,000 JSONL records created and validated.
 - Automated tests passed: 13 tests.
 - Manual review identified one confirmed production near-duplicate false positive involving two different Odisha districts.
+- Four repetition-filtered records inspected; one likely filter false positive identified in educational Hinglish.
 
 ### Remaining before final submission
 
-1. Verify and document the Wikipedia source license.
+1. Review applicable Wikipedia attribution and redistribution requirements before redistributing derived content.
 2. Inspect additional production near-duplicate removals and decide whether template-aware deduplication is needed.
-3. Inspect filter removals and document actual false positives, if any.
+3. Inspect HTML-markup, Wikitext-markup, and URL-heavy filter removals for possible false positives.
 4. Inspect contamination results and record per-method counts plus one reviewed rejected candidate.
 5. Run reproducibility checks and record actual output hashes.
 6. Record a final Git commit and ensure the manifest/repository state is documented appropriately.
