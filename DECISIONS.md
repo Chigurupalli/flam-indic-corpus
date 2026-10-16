@@ -10,7 +10,7 @@
 
 The Wikipedia input is a 15,000-record JSONL export, not the original full Wikimedia XML dump. The HinGE dataset uses the `Human-generated Hinglish` field. Source metadata and input file SHA-256 hashes are recorded in `data/output/manifest.json`.
 
-The Wikipedia source license remains unverified and must be checked before final submission.
+The Wikipedia dataset card lists CC BY-SA 3.0 and GFDL. See SOURCES.md for the source links and licensing caveats; verify applicable attribution and redistribution terms before redistributing content.
 
 ## 2. Funnel (per language)
 
@@ -183,6 +183,13 @@ Also inspect at least one rejected candidate and record:
 **Limitation:** Matching operates on normalized text, so exact matching means exact under the pipeline's normalization, not necessarily byte-for-byte identity of the original source text.
 
 Cross-script similarity is heuristic and can produce false positives. Manual inspection is necessary before interpreting every detected match as a genuine leak.
+
+### Manual review of contamination candidates
+
+Inspection of `contamination_rejected.jsonl` found near-match candidates involving distinct Wikipedia pages with shared template language. For example, the evaluation item about Kannauj district was matched against training text about Katihar, Khagaria, Gaya, and other Bihar districts, with near-match scores around 0.312–0.385. Another example matched the Palwal city evaluation item against Kishanganj and Khagaria city pages with a score of 0.529.
+
+These examples appear to be false positives caused by common encyclopedia sentence structures rather than identical underlying content. They demonstrate a limitation of similarity-based contamination detection: pages describing different places can share substantial wording. The examples were inspected as rejected candidates; they should not be interpreted as confirmed contamination or as proof that all flagged pairs are false positives.
+
 
 ## 6. Reproducibility
 
