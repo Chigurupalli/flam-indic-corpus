@@ -1,0 +1,4 @@
+numpy==2.4.4
+pyarrow==26.0.0
+huggingface_hub>=0.24   # only needed by download.sh (Hinglish source)
+pytest>=8               # only for tests
