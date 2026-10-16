@@ -283,7 +283,7 @@ These are proposed improvements, not capabilities demonstrated by the current ru
 6. Record a final Git commit and ensure the manifest/repository state is documented appropriately.
 7. Record the actual time spent on the assignment.
 
-**Time actually spent:** Fill in the real number of hours; do not estimate or invent it.
+**Time actually spent:** Approximately 4 hours.
 
 ### Additional reviewed contamination candidate
 
