@@ -284,3 +284,7 @@ These are proposed improvements, not capabilities demonstrated by the current ru
 7. Record the actual time spent on the assignment.
 
 **Time actually spent:** Fill in the real number of hours; do not estimate or invent it.
+
+### Additional reviewed contamination candidate
+
+The rejected candidate with evaluation ID `e0010` and training ID `da3f3a63c68af54f` was flagged by the `near` matching method with a score of **0.529**. The evaluation text describes Palwal in Haryana, while the training text describes Porbandar in Gujarat. Both use the sentence structure “यह ज़िले का मुख्यालय भी है” (“it is also the district headquarters”), but refer to different cities. I classify this candidate as a **likely false positive** caused by shared encyclopedia wording, not as a confirmed content leak. This is a manual assessment of this candidate only; it does not establish that other flagged candidates are false positives.
