@@ -1,0 +1,183 @@
+{
+  "counts": {
+    "drop_reasons": {
+      "contamination": {
+        "leak": 1559
+      },
+      "dedup": {
+        "exact_duplicate": 657,
+        "near_duplicate": 951
+      },
+      "filter": {
+        "markup_html": 33,
+        "markup_wikitext": 93,
+        "repetitive_low_diversity": 2,
+        "repetitive_top_token": 2,
+        "spam_url_heavy": 2
+      },
+      "holdout": {
+        "eval_item": 200
+      },
+      "langid": {
+        "not_hindi": 763
+      }
+    },
+    "dropped_by_stage": {
+      "contamination": {
+        "hi": 1559
+      },
+      "dedup": {
+        "hi": 1607,
+        "hi-Latn": 1
+      },
+      "filter": {
+        "hi": 131,
+        "hi-Latn": 1
+      },
+      "holdout": {
+        "hi": 140,
+        "hi-Latn": 60
+      },
+      "langid": {
+        "en": 704,
+        "other": 59
+      }
+    },
+    "final_kept": {
+      "hi": 11452,
+      "hi-Latn": 1262
+    },
+    "input_records": 16976,
+    "per_language": {
+      "en": {
+        "after_contamination": 0,
+        "after_dedup": 0,
+        "after_filter": 0,
+        "after_holdout": 0,
+        "after_langid": 0,
+        "labeled": 704
+      },
+      "hi": {
+        "after_contamination": 13059,
+        "after_dedup": 11452,
+        "after_filter": 14758,
+        "after_holdout": 14618,
+        "after_langid": 14889,
+        "labeled": 14889
+      },
+      "hi-Latn": {
+        "after_contamination": 1263,
+        "after_dedup": 1262,
+        "after_filter": 1323,
+        "after_holdout": 1263,
+        "after_langid": 1324,
+        "labeled": 1324
+      },
+      "other": {
+        "after_contamination": 0,
+        "after_dedup": 0,
+        "after_filter": 0,
+        "after_holdout": 0,
+        "after_langid": 0,
+        "labeled": 59
+      }
+    }
+  },
+  "environment": {
+    "git_commit": null,
+    "python": "3.11.4"
+  },
+  "eval": {
+    "affected_by_leak": 43,
+    "items": 200
+  },
+  "input_files": [
+    {
+      "bytes": 93870431,
+      "path": "hindi_wikipedia\\articles.jsonl",
+      "sha256": "78d743de049bc20e3dfc9a478f142a26e493b889c474c4f1c7a218623a0e0e84"
+    },
+    {
+      "bytes": 1591630,
+      "path": "hinge\\HinGE.csv",
+      "sha256": "dcfaf37ca9d7528e27da7be6b0cfffafb8bbe7825fe4da45077b96236cd9c9c3"
+    }
+  ],
+  "output_hashes": {
+    "eval.jsonl": "67c04072731ba2cc5eff90a7187601c3a5c151ca3bbad35581a003db210c5de2",
+    "part-00000.jsonl.gz": "4180ebc12b3d3afbde662a1e1966d22427414fd4f38d0faa2f9bc606fd80e9c4"
+  },
+  "pii_redactions": {
+    "AADHAAR": 1,
+    "EMAIL": 10,
+    "PHONE": 25
+  },
+  "sources": [
+    {
+      "config": "20231101.hi",
+      "downloaded": "2026-10-16",
+      "file": "hindi_wikipedia/articles.jsonl",
+      "format": "JSONL export",
+      "license": "Verify dataset card and applicable source license",
+      "name": "wikimedia/wikipedia",
+      "note": "15,000-record exported subset; not the original full Wikimedia XML dump",
+      "records": 15000,
+      "url": "https://huggingface.co/datasets/wikimedia/wikipedia"
+    },
+    {
+      "downloaded": "2026-10-16",
+      "file": "hinge/HinGE.csv",
+      "format": "CSV",
+      "license": "cc-by-4.0",
+      "name": "LingoIITGN/HinGE",
+      "records": 1976,
+      "revision": "e25a10382d9adb77f3a4f03b721fbd0a43c0de4c",
+      "text_field": "Human-generated Hinglish",
+      "url": "https://huggingface.co/datasets/LingoIITGN/HinGE"
+    }
+  ],
+  "thresholds": {
+    "BANDS": 16,
+    "BOILERPLATE_LINE_MAXLEN": 120,
+    "BOILERPLATE_LINE_SHARE": 0.5,
+    "CONTAM_NEAR": 0.6,
+    "CONTAM_NGRAM": 4,
+    "CONTAM_REJECT_MIN": 0.3,
+    "DEVANAGARI_MIN": 0.5,
+    "EVAL_HINGLISH": 60,
+    "EVAL_MAX_CHARS": 500,
+    "EVAL_MIN_CHARS": 40,
+    "EVAL_MIN_TOKENS": 8,
+    "EVAL_SEED": "flam-eval-v1",
+    "EVAL_SIZE": 200,
+    "HINGLISH_MIN_HITS": 2,
+    "HINGLISH_MIN_RATIO": 0.1,
+    "KEEP_LANGS": [
+      "hi",
+      "hi-Latn"
+    ],
+    "LATIN_MIN": 0.5,
+    "MARKUP_RESIDUE_MAX": 0.2,
+    "MAX_HTML_TAGS": 2,
+    "MAX_PHONES_IN_DOC": 5,
+    "MAX_REPLACEMENT_CHARS": 2,
+    "MAX_SHINGLES": 20000,
+    "MAX_URL_SHARE": 0.3,
+    "MAX_WIKI_MARKERS": 3,
+    "MINHASH_SEED": 1,
+    "MIN_TOKENS_LATIN": 3,
+    "NEAR_MIN_CHARS": 30,
+    "NEAR_THRESHOLD": 0.8,
+    "NUM_PERM": 128,
+    "REPEAT_MIN_TOKENS": 10,
+    "REPEAT_TOP_SHARE": 0.4,
+    "REPEAT_UNIQUE_RATIO": 0.15,
+    "ROWS": 8,
+    "SHARD_SIZE": 5000,
+    "SHINGLE": 5,
+    "SYMBOL_RATIO_MAX": 0.25,
+    "XS_K": 7,
+    "XS_MIN_SKELETON": 20,
+    "XS_THRESHOLD": 0.6
+  }
+}
